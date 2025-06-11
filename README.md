@@ -11,10 +11,11 @@ The application is made with springboot framework and here is endpoint of our ap
 | GET     | api/file/{id:int}   | get detail of a file (not implemented yet)                   |
 | GET     | api/file/show/{url} | it will display the PDF in the browser (not implemented yet) |
 
-The application use Java 21 and POSTGRESQL as database
+The application use Java 21 and H2 as database (the app was just for fun)
 
-To run the app for the first time you need to have docker installed on your system and run
+To run the app for the first time you need to have java 21 installed and run the following cmd
+```
+mvn spring-boot:run
+```
 
-```
-docker-compose up -build 
-```
+the app will start on port 8080. if you have another app running on that port, you can change the default port in `application.properties` file
