@@ -3,6 +3,7 @@ package com.claytonmuhoza.fileuploadwithspring.controller;
 import com.claytonmuhoza.fileuploadwithspring.dto.ErrorResponseDto;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

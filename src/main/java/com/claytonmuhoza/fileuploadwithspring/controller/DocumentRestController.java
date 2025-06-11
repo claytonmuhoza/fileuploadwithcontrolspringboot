@@ -2,14 +2,18 @@ package com.claytonmuhoza.fileuploadwithspring.controller;
 
 
 import com.claytonmuhoza.fileuploadwithspring.dto.DocumentDto;
+import com.claytonmuhoza.fileuploadwithspring.dto.PDFDto;
+import com.claytonmuhoza.fileuploadwithspring.dto.PersonDto;
 import com.claytonmuhoza.fileuploadwithspring.model.Document;
 import com.claytonmuhoza.fileuploadwithspring.service.DocumentService;
+import com.claytonmuhoza.fileuploadwithspring.validator.ValidPDF;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,22 +31,23 @@ public class DocumentRestController {
         return documentService.findAll();
     }
 
-    @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/json/file")
+    public ResponseEntity<Document> uploadDocument(@Valid @RequestBody PersonDto personDto, @RequestParam("file")MultipartFile pdfDto, BindingResult bindingResult) {
+
+        DocumentDto documentDto = new DocumentDto();
+        documentDto.setFirstname(personDto.getFirstname());
+        documentDto.setLastname(personDto.getLastname());
+        Document document = documentService.save(documentDto);
+
+        return ResponseEntity.ok(document);
+    }
+
+    @PostMapping(value = "file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> saveDocument(@Valid @ModelAttribute DocumentDto documentDto, BindingResult bindingResult) {
-        try {
-            Document document = new Document();
-            document.setFirstname(documentDto.getFirstname());
-            document.setLastname(documentDto.getLastname());
-            UUID uuid = UUID.randomUUID();
-            document.setDocumentUrl("document"+uuid+".PDF");
-            documentService.save(document);
 
-            return ResponseEntity.ok(document);
-        }
-        catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        Document document = documentService.save(documentDto);
 
+        return ResponseEntity.ok(document);
 
     }
 }
